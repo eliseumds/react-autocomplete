@@ -1,0 +1,34 @@
+{
+  "name": "rxjs",
+  "version": "2.2.12",
+  "main": [
+    "rx.js",
+    "rx.compat.js",    
+    "rx.aggregates.js",
+    "rx.async.js",
+    "rx.async.compat.js",    
+    "rx.binding.js",
+    "rx.coincidence.js",
+    "rx.experimental.js",
+    "rx.lite.js",
+    "rx.lite.compat.js",        
+    "rx.joinpatterns.js",
+    "rx.testing.js",
+    "rx.time.js",
+    "rx.virtualtime.js"
+  ],
+  "ignore": [
+    ".*",
+    "*.bat",
+    "*.md",
+    "*.min.*",
+    "*.txt",
+    "*.log",
+    "package.json",
+    "node_modules",
+    "doc",
+    "examples",
+    "src",
+    "tests"
+  ]
+}
