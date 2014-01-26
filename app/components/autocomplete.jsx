@@ -68,11 +68,11 @@ define(['api/search', 'mixins/event_observable'], function(search, EventObservab
             }
 
             s.keyUp
-                .select(function(event) {
+                .map(function(event) {
                     return event.target.value;
                 })
                 .throttle(400)
-                .where(function(value) {
+                .filter(function(value) {
                     if (this.state.selected && this.state.selected.label === value) {
                         this.stop = false;
                         return false;
@@ -82,26 +82,21 @@ define(['api/search', 'mixins/event_observable'], function(search, EventObservab
                     this.stop = false;
 
                     return cond;
-                }.bind(this))
+                }, this)
                 .distinctUntilChanged()
                 .do(function() {
                     this.stop = false;
                     this.setState({ hideList: false, highlightedIndex: -1, loading: true });
                 }.bind(this))
-                .select(function(value) {
-                    return search(value);
-                }.bind(this))
-                .switchLatest()
-                .where(function() {
+                .flatMapLatest(function(value) {
+                    return search(value).map(function (data) { return data[1] });
+                }, this)
+                .filter(function() {
                     if (!this.focused) {
                         this.setState({ loading: false, hideList: true });
                     }
-
                     return this.focused;
-                }.bind(this))
-                .select(function(data) {
-                    return data[1];
-                })
+                }, this)
                 .do(function() {
                     this.setState({ loading: false });
                 }.bind(this))
