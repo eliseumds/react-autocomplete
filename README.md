@@ -3,14 +3,24 @@ react-autocomplete
 
 Playing around with React.js from Facebook
 
-Running
--------
+Installing
+----------
 
-Install JSX as a global NPM module:
+You'll need JSX as a global NPM module:
 
 ```$ [sudo] npm install -g jsx```
 
-Then run:
+And Bower components:
+
+```
+$ cd assets
+$ bower install
+```
+
+Running
+-------
+
+Execute from the project's root folder:
 
 ```$ ./run```
 
