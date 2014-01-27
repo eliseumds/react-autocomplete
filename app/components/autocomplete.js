@@ -17,7 +17,6 @@ define(['api/search', 'mixins/event_observable'], function(search, EventObservab
         },
         getSubjects: function() {
             return {
-                keyDown: new Rx.Subject(),
                 keyUp: new Rx.Subject()
             }
         },
@@ -28,37 +27,35 @@ define(['api/search', 'mixins/event_observable'], function(search, EventObservab
         onFocus: function() {
             this.focused = true;
         },
+        onKeyDown: function(event) {
+            var code = event.keyCode,
+                highlightedIndex = this.state.highlightedIndex;
+
+            switch (code) {
+                case 13:
+                    this.selectItem(this.state.data[this.state.highlightedIndex]);
+                    break
+                case 40:
+                    highlightedIndex < this.state.data.length - 1 && (highlightedIndex += 1);
+                    break
+                case 38:
+                    highlightedIndex > -1 && (highlightedIndex -= 1);
+                    break
+            };
+
+            this.setState({ highlightedIndex: highlightedIndex });
+            highlightedIndex > -1 && this.ensureHighlightedVisible();
+
+            if (code === 13 || code === 40 || code === 38) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+        },
         onSelect: function(item) {
             this.selectItem(item);
         },
         getStreams: function() {
             var s = this.subjects;
-
-            s.keyDown.subscribe(function(event) {
-                var code = event.keyCode,
-                    highlightedIndex = this.state.highlightedIndex;
-
-                switch (code) {
-                    case 13:
-                        this.selectItem(this.state.data[this.state.highlightedIndex]);
-                        break
-                    case 40:
-                        highlightedIndex < this.state.data.length - 1 && (highlightedIndex += 1);
-                        break
-                    case 38:
-                        highlightedIndex > -1 && (highlightedIndex -= 1);
-                        break
-                };
-
-                this.setState({ highlightedIndex: highlightedIndex });
-                highlightedIndex > -1 && this.ensureHighlightedVisible();
-
-                if (code === 13 || code === 40 || code === 38) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                }
-
-            }.bind(this));
 
             function map(item) {
                 return {
@@ -115,7 +112,7 @@ define(['api/search', 'mixins/event_observable'], function(search, EventObservab
             return (
                 React.DOM.div( {className:'autocomplete ' + (s.loading && 'loading')}, 
                     React.DOM.h3(null, "Search Wikipedia:"),
-                    React.DOM.input( {ref:"searchInput", type:"search", size:"50", onFocus:this.onFocus, onBlur:this.onBlur, onKeyDown:this.handlers.keyDown, onKeyUp:this.handlers.keyUp} ),
+                    React.DOM.input( {ref:"searchInput", type:"search", size:"50", onFocus:this.onFocus, onBlur:this.onBlur, onKeyDown:this.onKeyDown, onKeyUp:this.handlers.keyUp} ),
 
                     React.DOM.div( {className:'autocomplete__result ' + (s.hideList && 'hide')}, 
                         s.data && s.data.length
