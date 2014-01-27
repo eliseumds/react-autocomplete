@@ -1,0 +1,34 @@
+{
+  "name": "react-autocomplete",
+  "version": "0.0.1",
+  "homepage": "https://github.com/eliseumds/react-autocomplete",
+  "authors": [
+    "Eliseu Monar <eliseumds@gmail.com>"
+  ],
+  "description": "Just tasting some ReactJS + RxJS",
+  "main": "index.html",
+  "keywords": [
+    "reactjs",
+    "rxjs",
+    "autocomplete",
+    "javascript",
+    "async",
+    "observable",
+    "frp"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.0.3",
+    "react": "~0.8.0",
+    "requirejs": "~2.1.9",
+    "rxjs": "~2.2.12"
+  }
+}
