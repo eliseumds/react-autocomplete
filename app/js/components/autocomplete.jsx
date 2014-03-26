@@ -13,7 +13,13 @@ define(['api/search', 'mixins/event_observable'], function(search, EventObservab
         },
         focused: false,
         getInitialState: function() {
-            return { data: [], hideList: true, highlightedIndex: -1, loading: false, selected: null };
+            return {
+                data: [],
+                hideList: true,
+                highlightedIndex: -1,
+                loading: false,
+                selected: null
+            };
         },
         getSubjects: function() {
             return {
@@ -83,15 +89,24 @@ define(['api/search', 'mixins/event_observable'], function(search, EventObservab
                 .distinctUntilChanged()
                 .do(function() {
                     this.stop = false;
-                    this.setState({ hideList: false, highlightedIndex: -1, loading: true });
+
+                    this.setState({
+                        hideList: false,
+                        highlightedIndex: -1,
+                        loading: true
+                    });
                 }.bind(this))
                 .flatMapLatest(function(value) {
                     return search(value).map(function (data) { return data[1] });
                 }, this)
                 .filter(function() {
                     if (!this.focused) {
-                        this.setState({ loading: false, hideList: true });
+                        this.setState({
+                            loading: false,
+                            hideList: true
+                        });
                     }
+
                     return this.focused;
                 }, this)
                 .do(function() {
@@ -110,27 +125,34 @@ define(['api/search', 'mixins/event_observable'], function(search, EventObservab
             var s = this.state;
 
             return (
-                React.DOM.div( {className:'autocomplete ' + (s.loading && 'loading')}, 
-                    React.DOM.h3(null, "Search Wikipedia:"),
-                    React.DOM.input( {ref:"searchInput", type:"search", size:"50", onFocus:this.onFocus, onBlur:this.onBlur, onKeyDown:this.onKeyDown, onKeyUp:this.handlers.keyUp} ),
+                <div className={'autocomplete ' + (s.loading && 'loading')}>
+                    <h3>Search Wikipedia:</h3>
+                    <input
+                        ref="searchInput"
+                        type="search"
+                        size="50"
+                        onFocus={this.onFocus}
+                        onBlur={this.onBlur}
+                        onKeyDown={this.onKeyDown}
+                        onKeyUp={this.handlers.keyUp} />
 
-                    React.DOM.div( {className:'autocomplete__result ' + (s.hideList && 'hide')}, 
-                        s.data && s.data.length
+                    <div className={'autocomplete__result ' + (s.hideList && 'hide')}>
+                        {s.data && s.data.length
                             ? (
-                                React.DOM.ul( {ref:"list"}, 
-                                    s.data.map(function(item, i) {
-                                        return React.DOM.li(
-                                            {onMouseDown:this.onSelect.bind(this, item),
-                                            className:s.highlightedIndex === i && 'active',
-                                            key:i,
-                                            'data-value':item.value}, item.label);
-                                    }.bind(this))
-                                )
+                                <ul ref="list">
+                                    {s.data.map(function(item, i) {
+                                        return <li
+                                            onMouseDown={this.onSelect.bind(this, item)}
+                                            className={s.highlightedIndex === i && 'active'}
+                                            key={i}
+                                            data-value={item.value}>{item.label}</li>;
+                                    }.bind(this))}
+                                </ul>
                             )
-                            : React.DOM.div( {className:"autocomplete__empty"}, s.loading ? 'Carregando' : 'Nenhum resultado')
-                        
-                    )
-                )
+                            : <div className="autocomplete__empty">{s.loading ? 'Carregando' : 'Nenhum resultado'}</div>
+                        }
+                    </div>
+                </div>
             );
         },
         resetListScroll: function() {

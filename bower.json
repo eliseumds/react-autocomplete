@@ -1,12 +1,12 @@
 {
   "name": "react-autocomplete",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "homepage": "https://github.com/eliseumds/react-autocomplete",
   "authors": [
     "Eliseu Monar <eliseumds@gmail.com>"
   ],
-  "description": "Just tasting some ReactJS + RxJS",
-  "main": "index.html",
+  "description": "A ReactJS + RxJS autocomplete example",
+  "main": "Gulpfile.js",
   "keywords": [
     "reactjs",
     "rxjs",
@@ -16,19 +16,21 @@
     "observable",
     "frp"
   ],
-  "license": "MIT",
+  "license": "BSD",
   "private": true,
   "ignore": [
     "**/.*",
     "node_modules",
     "bower_components",
+    "app/vendor",
     "test",
     "tests"
   ],
   "dependencies": {
-    "bootstrap": "~3.0.3",
-    "react": "~0.8.0",
-    "requirejs": "~2.1.9",
-    "rxjs": "~2.2.12"
+    "jquery": "~2.1.0",
+    "react": "~0.10.0",
+    "bootstrap": "~3.1.1",
+    "rxjs": "~2.2.16",
+    "requirejs": "~2.1.11"
   }
 }
