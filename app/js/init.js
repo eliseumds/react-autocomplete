@@ -2,7 +2,7 @@
 'use strict';
 
 requirejs.config({
-    baseUrl: '/js',
+    baseUrl: '/app/js',
     urlArgs: 'bust=' + (+new Date())
 });
 
