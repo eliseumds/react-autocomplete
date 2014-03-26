@@ -8,7 +8,9 @@ Installing
 
 You'll need react-tools:
 
-```$ [sudo] npm install -g react-tools```
+```
+$ [sudo] npm install -g react-tools
+```
 
 And Bower:
 
@@ -26,11 +28,15 @@ $ bower install
 Running
 -------
 
-```$ NODE_PATH=`pwd` node main.js```
+```
+$ NODE_PATH=`pwd` node main.js
+```
 
 Developing
 ----------
 
-```$ gulp```
+```
+$ gulp
+```
 
 * Every JSX file will automatically be compiled to a JS file in the same folder
