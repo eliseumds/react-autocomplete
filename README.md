@@ -26,7 +26,11 @@ $ bower install
 Running
 -------
 
+```$ NODE_PATH=`pwd` node main.js```
+
+Developing
+----------
+
 ```$ gulp```
 
-* A server will start up at [http://localhost:8000](http://localhost:8000)
 * Every JSX file will automatically be compiled to a JS file in the same folder
