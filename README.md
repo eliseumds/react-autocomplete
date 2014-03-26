@@ -1,18 +1,32 @@
 react-autocomplete
 ==================
 
-Playing around with React.js from Facebook
+Playing around with ReactJS and RxJS
+
+Installing
+----------
+
+You'll need react-tools:
+
+```$ [sudo] npm install -g react-tools```
+
+And Bower:
+
+```
+$ [sudo] npm install -g bower
+```
+
+And some components (from the project's root folder):
+
+```
+$ npm install
+$ bower install
+```
 
 Running
 -------
 
-Install JSX as a global NPM module:
-
-```$ [sudo] npm install -g jsx```
-
-Then run:
-
-```$ ./run```
+```$ gulp```
 
 * A server will start up at [http://localhost:8000](http://localhost:8000)
 * Every JSX file will automatically be compiled to a JS file in the same folder
