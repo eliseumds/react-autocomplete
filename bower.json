@@ -31,6 +31,7 @@
     "react": "~0.10.0",
     "bootstrap": "~3.1.1",
     "rxjs": "~2.2.16",
-    "requirejs": "~2.1.11"
+    "requirejs": "~2.1.11",
+    "lodash": "~2.4.1"
   }
 }
