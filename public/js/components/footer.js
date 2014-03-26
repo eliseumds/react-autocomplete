@@ -10,7 +10,9 @@ define(function(require) {
             return (
                 React.DOM.div( {className:"footer"}, 
                     React.DOM.hr(null ),
-                    "Repo: ", React.DOM.a( {href:"https://github.com/eliseumds/react-autocomplete"}, "https://github.com/eliseumds/react-autocomplete")
+                    "Repo: ", React.DOM.a( {href:"https://github.com/eliseumds/react-autocomplete"}, "https://github.com/eliseumds/react-autocomplete"),
+                    React.DOM.hr(null ),
+                    "Extra: ", this.props.myCustomVar
                 )
             );
         }

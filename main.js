@@ -25,7 +25,7 @@ app.use(middleware.react({
 }));
 
 app.get('/', function(req, res) {
-    return res.renderComponent('autocomplete');
+    return res.renderComponent('autocomplete', {myCustomVar: 'Hey, I am a custom var from the server'});
 });
 app.listen(port);
 console.log('HTTP server running at port ' + port);
