@@ -6,7 +6,7 @@
     "Eliseu Monar <eliseumds@gmail.com>"
   ],
   "description": "A ReactJS + RxJS autocomplete example",
-  "main": "Gulpfile.js",
+  "main": "main.js",
   "keywords": [
     "reactjs",
     "rxjs",
