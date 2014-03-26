@@ -1,8 +1,14 @@
 /** @jsx React.DOM */
+'use strict';
+if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
-define(['api/search', 'mixins/event_observable'], function(search, EventObservableMixin) {
+define(function(require) {
+    var EventObservableMixin = require('../mixins/event_observable');
+    var React = require('react/addons');
+
     return React.createClass({
         mixins: [EventObservableMixin],
+        subjects: ['keyUp'],
         ensureHighlightedVisible: function() {
             if (!this.refs.list || this.state.highlightedIndex < 0) return;
 
@@ -11,7 +17,67 @@ define(['api/search', 'mixins/event_observable'], function(search, EventObservab
 
             return $list.scrollTop($list.scrollTop() + $highlighted.position().top - $list.height() / 2 + $highlighted.height() / 2);
         },
-        focused: false,
+        fireStreams: function() {
+            var s = this.subjects;
+
+            function map(item) {
+                return {
+                    label: item,
+                    value: item
+                }
+            }
+
+            s.keyUp
+                .map(function(event) {
+                    return event.target.value;
+                })
+                .throttle(400)
+                .filter(function(value) {
+                    if (this.state.selected && this.state.selected.label === value) {
+                        this.setState({stop: false});
+                        return false;
+                    }
+
+                    var cond = !this.state.stop && value && value.length > 2;
+                    this.setState({stop: false});
+
+                    return cond;
+                }, this)
+                .distinctUntilChanged()
+                .do(function() {
+                    this.setState({stop: false});
+
+                    this.setState({
+                        hideList: false,
+                        highlightedIndex: -1,
+                        loading: true
+                    });
+                }.bind(this))
+                .flatMapLatest(function(value) {
+                    return require('api/search')(value).map(function (data) { return data[1] });
+                }, this)
+                .filter(function() {
+                    if (!this.state.focused) {
+                        this.setState({
+                            loading: false,
+                            hideList: true
+                        });
+                    }
+
+                    return this.state.focused;
+                }, this)
+                .do(function() {
+                    this.setState({ loading: false });
+                }.bind(this))
+                .subscribe(function(resp) {
+                    if (!this.state.focused) return;
+
+                    this.resetListScroll();
+                    this.setState({ data: resp.map(map) });
+                }.bind(this));
+
+            return {};
+        },
         getInitialState: function() {
             return {
                 data: [],
@@ -21,17 +87,12 @@ define(['api/search', 'mixins/event_observable'], function(search, EventObservab
                 selected: null
             };
         },
-        getSubjects: function() {
-            return {
-                keyUp: new Rx.Subject()
-            }
-        },
         onBlur: function() {
-            this.focused = false;
+            this.setState({focused: false});
             this.selectItem(this.state.selected);
         },
         onFocus: function() {
-            this.focused = true;
+            this.setState({focused: true});
         },
         onKeyDown: function(event) {
             var code = event.keyCode,
@@ -59,67 +120,6 @@ define(['api/search', 'mixins/event_observable'], function(search, EventObservab
         },
         onSelect: function(item) {
             this.selectItem(item);
-        },
-        getStreams: function() {
-            var s = this.subjects;
-
-            function map(item) {
-                return {
-                    label: item,
-                    value: item
-                }
-            }
-
-            s.keyUp
-                .map(function(event) {
-                    return event.target.value;
-                })
-                .throttle(400)
-                .filter(function(value) {
-                    if (this.state.selected && this.state.selected.label === value) {
-                        this.stop = false;
-                        return false;
-                    }
-
-                    var cond = !this.stop && value && value.length > 2;
-                    this.stop = false;
-
-                    return cond;
-                }, this)
-                .distinctUntilChanged()
-                .do(function() {
-                    this.stop = false;
-
-                    this.setState({
-                        hideList: false,
-                        highlightedIndex: -1,
-                        loading: true
-                    });
-                }.bind(this))
-                .flatMapLatest(function(value) {
-                    return search(value).map(function (data) { return data[1] });
-                }, this)
-                .filter(function() {
-                    if (!this.focused) {
-                        this.setState({
-                            loading: false,
-                            hideList: true
-                        });
-                    }
-
-                    return this.focused;
-                }, this)
-                .do(function() {
-                    this.setState({ loading: false });
-                }.bind(this))
-                .subscribe(function(resp) {
-                    if (!this.focused) return;
-
-                    this.resetListScroll();
-                    this.setState({ data: resp.map(map) });
-                }.bind(this));
-
-            return {};
         },
         render: function() {
             var s = this.state;
@@ -158,7 +158,6 @@ define(['api/search', 'mixins/event_observable'], function(search, EventObservab
         resetListScroll: function() {
             this.refs.list && (this.refs.list.getDOMNode().scrollTop = 0);
         },
-        stop: false,
         selectItem: function(item) {
             this.resetListScroll();
             this.setState({ data: [], hideList: true, selected: item });

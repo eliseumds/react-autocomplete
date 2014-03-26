@@ -1,0 +1,16 @@
+doctype
+html
+    head
+        title React + RxJS Autocomplete
+        link(rel='stylesheet', href='vendor/bootstrap/dist/css/bootstrap.min.css')
+        link(rel='stylesheet', href='css/components/autocomplete/autocomplete.css')
+    body.container
+        #js-yield-header!= initialHeaderStr
+        #js-yield!= initialTemplateStr
+        #js-yield-footer!= initialFooterStr
+
+    script.
+        var config = {fastRender: !{JSON.stringify(fastRender)}};
+    script(src='vendor/jquery/dist/jquery.min.js')
+    script(src='vendor/bootstrap/dist/js/bootstrap.min.js')
+    script(src='vendor/requirejs/require.js',data-main='js/init.js')

@@ -1,4 +1,8 @@
-define(function() {
+'use strict';
+
+define(function(require) {
+    var Rx = require('rx');
+
     return function(term) {
         var promise = $.ajax({
             url: 'http://en.wikipedia.org/w/api.php',
